@@ -1,0 +1,4 @@
+useDynLib(RIT)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
+import(data.table)
