@@ -19,6 +19,17 @@ single_predict <- function(rit,instance){
   response
 }
 
+#' @title Classification Rule for Relaxed Random Intersection Trees.
+#' @description Applies a basic \code{argmax} rule in order to classify new instances.
+#'
+#' @return A response vector for the \code{testset} instances
+#'
+#' @param rit A model produced by \code{relaxed_RIT}
+#' @param testset A dataframe containing the instances to classify
+#' 
+#' @references Ballarini Robin. Random intersection trees for genomic data analysis. Master's thesis, Université Catholique de Louvain, 2016.
+#' @export
+#'
 rit_predict <- function(rit,testset){
   # Apply min-max scaling
   sc <- rit[["scaling"]]

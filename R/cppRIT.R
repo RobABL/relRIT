@@ -1,3 +1,7 @@
+#' @useDynLib RIT
+#' @import data.table
+#'
+
 # Apply min-max scaling over the dataframe
 # Ordered factors are reduced to numeric vectors and scaled
 # Unordered factors are untouched
@@ -69,6 +73,25 @@ stopParameters <- function(data,classes,epsilon,epsilon_cat,n_trees,depth,min_in
     stop("branch should be at least 1.")
 }
 
+#' @title Relaxed Random Intersection Trees.
+#' @description Executes the algorithm known as Relaxed Random Intersection Trees.
+#' 
+#' @return A model that is composed of all informative interactions found in the dataset.
+#'
+#' @param data The dataset as a dataframe.
+#' @param classes A response vector for the dataset.
+#' @param theta The prevalence thresholds. Used to determine if an interaction is informative of not w.r.t. the classes.
+#' @param epsilon The scaling factor applied to the cumulative error threshold for continuous features.
+#' @param epsilon_cat The scaling factor applied to the cumulative error threshold for categorical features.
+#' @param n_trees The number of trees.
+#' @param depth The depth of the interaction search.
+#' @param min_inter_sz The minimum allowed size of interactions.
+#' @param branch The branching factor in the interaction search.
+#' @param es A logical that indicates whether or not early stopping should be used.
+#' 
+#' @references Ballarini Robin. Random intersection trees for genomic data analysis. Master's thesis, Université Catholique de Louvain, 2016.
+#' @export
+#'
 relaxed_RIT <- function(data,classes,theta,epsilon,epsilon_cat,n_trees=100L,depth=10L,min_inter_sz=2L,branch=5,es=TRUE){
   
   stopParameters(data,classes,epsilon,epsilon_cat,n_trees,depth,min_inter_sz,branch)
