@@ -1,4 +1,4 @@
-single_predict <- function(rit,instance){
+single_predict <- function(rit,instance,radius){
   class_names <- names(rit[["Class_priors"]])
   nb_class <- length(class_names)
   
@@ -9,7 +9,7 @@ single_predict <- function(rit,instance){
   isCat <- rit[["cat_attr"]]
   
   for(elem in model){
-    coeff <- compute_sim(elem[["interaction"]],instance,isCat)
+    coeff <- compute_sim(elem[["interaction"]],instance,isCat,radius)
     probs <- probs + coeff*log10(elem[["prevalence"]])
     probs <- probs + {1-coeff}*{log10(1-elem[["prevalence"]])}
   }
@@ -24,13 +24,14 @@ single_predict <- function(rit,instance){
 #'
 #' @return A response vector for the \code{testset} instances
 #'
-#' @param rit A model produced by \code{relaxed_RIT}
-#' @param testset A dataframe containing the instances to classify
+#' @param rit A model produced by \code{relaxed_RIT}.
+#' @param testset A dataframe containing the instances to classify.
+#' @param radius The radius used to compute the classification weights.
 #' 
 #' @references Ballarini Robin. Random intersection trees for genomic data analysis. Ecole polytechnique de Louvain, Université catholique de Louvain, 2016. Prom. : Dupont, Pierre.
 #' @export
 #'
-rit_predict <- function(rit,testset){
+rit_predict <- function(rit,testset,radius=1){
   # Apply min-max scaling
   sc <- rit[["scaling"]]
   mins <- sc[["Mins"]]
@@ -49,7 +50,7 @@ rit_predict <- function(rit,testset){
   # Predict
   response <- vector(mode="character",length=nrow(testset))
   for(i in 1:nrow(testset)){
-    response[i] <- single_predict(rit,sc_data[i,])
+    response[i] <- single_predict(rit,sc_data[i,],radius)
   }
   response
 }

@@ -4,12 +4,14 @@
 \alias{rit_predict}
 \title{Classification Rule for Relaxed Random Intersection Trees.}
 \usage{
-rit_predict(rit, testset)
+rit_predict(rit, testset, radius = 1)
 }
 \arguments{
-\item{rit}{A model produced by \code{relaxed_RIT}}
+\item{rit}{A model produced by \code{relaxed_RIT}.}
 
-\item{testset}{A dataframe containing the instances to classify}
+\item{testset}{A dataframe containing the instances to classify.}
+
+\item{radius}{The radius used to compute the classification weights.}
 }
 \value{
 A response vector for the \code{testset} instances

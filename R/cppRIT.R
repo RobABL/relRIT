@@ -49,7 +49,7 @@ mm_scaling <- function(data){
   list(Mins=mins,Spans=span,data=as.data.frame(sc_data))
 }
 
-stopParameters <- function(data,classes,epsilon,epsilon_cat,n_trees,depth,min_inter_sz,branch){
+stopParameters <- function(data,classes,epsilon,epsilon_cat,n_trees,depth,min_inter_sz,branch,radius){
   # check parameters
   if(!is.data.frame(data))
     stop("Data parameter must be a dataframe.")
@@ -71,6 +71,8 @@ stopParameters <- function(data,classes,epsilon,epsilon_cat,n_trees,depth,min_in
     stop("min_inter_sz should be at least 2.")
   if(branch < 1)
     stop("branch should be at least 1.")
+  if(radius <= 0)
+    stop("radius should be strictly positive.")
 }
 
 #' @title Relaxed Random Intersection Trees.
@@ -87,14 +89,15 @@ stopParameters <- function(data,classes,epsilon,epsilon_cat,n_trees,depth,min_in
 #' @param depth The depth of the interaction search.
 #' @param min_inter_sz The minimum allowed size of interactions.
 #' @param branch The branching factor in the interaction search.
+#' @param radius The radius used to compute the prevalences.
 #' @param es A logical that indicates whether or not early stopping should be used.
 #' 
 #' @references Ballarini Robin. Random intersection trees for genomic data analysis. Ecole polytechnique de Louvain, Université catholique de Louvain, 2016. Prom. : Dupont, Pierre.
 #' @export
 #'
-relaxed_RIT <- function(data,classes,theta,epsilon,epsilon_cat,n_trees=100L,depth=10L,min_inter_sz=2L,branch=5,es=TRUE){
+relaxed_RIT <- function(data,classes,theta,epsilon,epsilon_cat,n_trees=100L,depth=10L,min_inter_sz=2L,branch=5,radius=1,es=TRUE){
   
-  stopParameters(data,classes,epsilon,epsilon_cat,n_trees,depth,min_inter_sz,branch)
+  stopParameters(data,classes,epsilon,epsilon_cat,n_trees,depth,min_inter_sz,branch,radius)
   
   # Class information
   classes <- factor(classes)
@@ -134,7 +137,7 @@ relaxed_RIT <- function(data,classes,theta,epsilon,epsilon_cat,n_trees=100L,dept
   }
   
   # Call main algo
-  all_leaves <- cpp_Relaxed_RIT(datas, o_theta, isCat, epsilon, epsilon_cat, n_trees, depth, branch, min_inter_sz,es)
+  all_leaves <- cpp_Relaxed_RIT(datas, o_theta, isCat, epsilon, epsilon_cat, n_trees, depth, branch, min_inter_sz,radius,es)
   
   # Filter interactions
   all_leaves <- Filter(function(inter){

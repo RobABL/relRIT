@@ -42,14 +42,14 @@ vector<double> random_instance(Rcpp::DataFrame const& x, Generator& prng){
 // DFS search on tree. Places results in leaves parameter.
 void tree(unordered_map<string,Interaction>& leaves,Rcpp::List const& datas, int cls,
 vector<double> const& theta, vector<bool> const& factor,double epsilon_cont,double epsilon_cat,
-int depth,int min_inter_sz,int branch,Generator& prng,bool es){
+int depth,int min_inter_sz,int branch,Generator& prng,double radius,bool es){
   stack<Interaction, vector<Interaction> > frontier;
   Rcpp::DataFrame class_data = Rcpp::as<Rcpp::DataFrame>(datas[cls]);
   
   // Init root
   int nb_class = datas.size();
   vector<double> root_instance = random_instance(class_data,prng);
-  Interaction root(root_instance,factor,class_data,epsilon_cont,epsilon_cat,0,nb_class);
+  Interaction root(root_instance,factor,class_data,epsilon_cont,epsilon_cat,0,nb_class,radius);
   frontier.push(root);
 
   while(!frontier.empty()){
@@ -83,7 +83,7 @@ int depth,int min_inter_sz,int branch,Generator& prng,bool es){
 // [[Rcpp::export]]
 Rcpp::List cpp_Relaxed_RIT(Rcpp::List const& datas,Rcpp::NumericVector const& theta,
 Rcpp::LogicalVector const& factor,double epsilon_cont,double epsilon_cat,int n_trees,
-int depth,int branch,int min_inter_sz,bool es){
+int depth,int branch,int min_inter_sz,double radius,bool es){
   
   unordered_map<string,Interaction> res;
   
@@ -97,7 +97,7 @@ int depth,int branch,int min_inter_sz,bool es){
     
     for(int t=0;t<n_trees;++t){// Iterate over n_trees
       //Rcpp::Rcout << "Tree " << t << " of class " << c << endl;
-      tree(res,datas,c,c_theta,cFactor,epsilon_cont,epsilon_cat,depth,min_inter_sz,branch,gen,es);
+      tree(res,datas,c,c_theta,cFactor,epsilon_cont,epsilon_cat,depth,min_inter_sz,branch,gen,radius,es);
       Rcpp::checkUserInterrupt();
     }
   }

@@ -4,7 +4,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double compute_sim(List const& interaction, DataFrame const& data, LogicalVector const& isFactor){
+double compute_sim(List const& interaction, DataFrame const& data, LogicalVector const& isFactor, double radius){
   int nrows = as<NumericVector>(data[0]).size();
   int inter_sz = interaction.size();
   NumericVector diffs(nrows);
@@ -29,7 +29,7 @@ double compute_sim(List const& interaction, DataFrame const& data, LogicalVector
     }
     
     // Sum similarity measures
-    avg_sim += std::exp(-diffs[i]);
+    avg_sim += std::exp(-diffs[i]/radius);
   }
   
   // Compute mean

@@ -36,6 +36,7 @@ class Interaction{
         vector<InteractionItem> items;
         int depth;
         vector<double> sims;
+        double radius;
         bool sims_valid;
         void compute_sims(Rcpp::List const&);
 
@@ -49,7 +50,7 @@ class Interaction{
         int get_depth() const;
         void set_depth(int);
         Interaction();
-        Interaction(vector<double> const&,vector<bool> const&,Rcpp::DataFrame const&,double,double,int,int);
+        Interaction(vector<double> const&,vector<bool> const&,Rcpp::DataFrame const&,double,double,int,int,double);
 };
 
 #endif

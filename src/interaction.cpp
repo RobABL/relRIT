@@ -179,7 +179,7 @@ void Interaction::compute_sims(Rcpp::List const& datas){
         diffs[i] += items[j].get_diff(instance_val);
       }
       
-      avg_sim += exp(-diffs[i]);
+      avg_sim += exp(-diffs[i]/radius);
     }
     
     avg_sim /= nrows;
@@ -240,13 +240,14 @@ Interaction::Interaction(){
   vector<InteractionItem> new_items;
   items = new_items;
   depth = 0;
+  radius = 1;
   sims_valid = false;
   vector<double> new_sims;
   sims = new_sims;
 }
 
 Interaction::Interaction(vector<double> const& instance,vector<bool> const& factor,
-Rcpp::DataFrame const& class_data,double epsilon_cont,double epsilon_cat,int p_depth,int nb_class){
+Rcpp::DataFrame const& class_data,double epsilon_cont,double epsilon_cat,int p_depth,int nb_class,double p_radius){
     vector<InteractionItem> new_items(class_data.size());
     Rcpp::CharacterVector names = class_data.names();
 
@@ -268,4 +269,5 @@ Rcpp::DataFrame const& class_data,double epsilon_cont,double epsilon_cat,int p_d
     sims_valid = false;
     vector<double> new_sims(nb_class);
     sims = new_sims;
+    radius = p_radius;
 }

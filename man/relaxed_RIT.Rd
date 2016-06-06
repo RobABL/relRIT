@@ -5,7 +5,7 @@
 \title{Relaxed Random Intersection Trees.}
 \usage{
 relaxed_RIT(data, classes, theta, epsilon, epsilon_cat, n_trees = 100L,
-  depth = 10L, min_inter_sz = 2L, branch = 5, es = TRUE)
+  depth = 10L, min_inter_sz = 2L, branch = 5, radius = 1, es = TRUE)
 }
 \arguments{
 \item{data}{The dataset as a dataframe.}
@@ -25,6 +25,8 @@ relaxed_RIT(data, classes, theta, epsilon, epsilon_cat, n_trees = 100L,
 \item{min_inter_sz}{The minimum allowed size of interactions.}
 
 \item{branch}{The branching factor in the interaction search.}
+
+\item{radius}{The radius used to compute the prevalences.}
 
 \item{es}{A logical that indicates whether or not early stopping should be used.}
 }
